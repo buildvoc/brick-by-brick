@@ -1,0 +1,37 @@
+{
+  "name": "brick-by-brick",
+  "version": "0.12.0",
+  "description": "NYC Space/Time Directory - brick-by-brick",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nypl-spacetime/brick-by-brick.git"
+  },
+  "author": "Bert Spaan",
+  "license": "MIT",
+  "scripts": {
+    "start": "nodemon ./index.js",
+    "start-prod": "node ./index.js",
+    "test": "standard && cross-env NODE_ENV=test mocha test"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
+    "express": "^4.18.2",
+    "express-pg-oauth": "github:nypl-spacetime/express-pg-oauth",
+    "highland": "^2.13.5",
+    "minimist": "^1.2.8",
+    "path": "^0.12.7",
+    "pg": "^8.11.3",
+    "pg-query-stream": "^4.5.3",
+    "ramda": "^0.29.1",
+    "socket.io": "^4.7.3"
+  },
+  "devDependencies": {
+    "cross-env": "^3.1.1",
+    "mocha": "^3.1.0",
+    "nodemon": "^2.0.4",
+    "standard": "^8.3.0"
+  }
+}

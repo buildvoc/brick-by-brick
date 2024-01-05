@@ -1,0 +1,30 @@
+{
+  "emitEvents": false,
+  "server": {
+    "host": "http://localhost:3011",
+    "secret": "secret"
+  },
+  "database": {
+    "url": "postgres://user:password@localhost:5432/brick-by-brick"
+  },
+  "app": {
+    "name": "NYC Space/Time Directory - brick-by-brick",
+    "url": "http://localhost:3011"
+  },
+  "twitter": {
+    "key": null,
+    "secret": null
+  },
+  "facebook": {
+    "key": null,
+    "secret": null
+  },
+  "google": {
+    "key": null,
+    "secret": null
+  },
+  "github": {
+    "key": "b4f3d28a564c8445bab85441c5e964bfbf003a51",
+    "secret": "b2884c4f7b97e0be646d"
+  }
+}
