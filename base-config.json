@@ -1,11 +1,11 @@
 {
   "emitEvents": false,
   "server": {
-    "host": "http://localhost:3011",
+    "host": "http://brick-by-brick.buildingshistory.co.uk",
     "secret": "secret"
   },
   "database": {
-    "url": "postgres://phil_st:Phil!St@cey3202@206.189.23.107:5432/brick_by_brick"
+    "url": "postgres://phil_st:Phil!St@cey3202@localhost:5432/brick_by_brick"
   },
   "app": {
     "name": "NYC Space/Time Directory - brick-by-brick",

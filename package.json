@@ -19,6 +19,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.0",
     "express": "^4.18.2",
+    "express-pg-oauth": "github:buildvoc/express-pg-oauth",
     "highland": "^2.13.5",
     "minimist": "^1.2.8",
     "path": "^0.12.7",
