@@ -45,7 +45,7 @@ if (config.emitEvents) {
 //   process.exit(1)
 // }
 
-// const oauth = require('express-pg-oauth')
+// const oauth = require('./express-pg-oauth/index')
 const db = require('./lib/db')
 const queries = require('./lib/queries')
 const serialize = require('./lib/serialize')
