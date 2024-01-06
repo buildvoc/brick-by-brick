@@ -29,10 +29,12 @@ Looking for the cause
 
 ## Running B-BY-B Server
 1. Clone this `git clone https://github.com/buildvoc/brick-by-brick.git`
-2. Run `npm install`
-3. Run this b-by-b app `npm start`
-4. This error will appear 
+2. Checkout to b-by-b branch `git checkout b-by-b`
+3. Run `npm install`
+4. Run this b-by-b app `npm start`
+5. This error will appear 
 `
+
 brick-by-brick API listening on port 3011!
 node:internal/process/promises:289
             triggerUncaughtException(err, true /* fromPromise */);
@@ -66,6 +68,7 @@ AggregateError
 
 Node.js v20.9.0
 [nodemon] app crashed - waiting for file changes before starting...
+
 `
 
-5. Error will not shown If you comment on the line 64 on index.js file. This action is disabling oauth.
+6. Error will not shown If you comment on the line 64 on index.js file. This action is disabling oauth.
