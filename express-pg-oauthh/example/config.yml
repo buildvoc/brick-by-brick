@@ -1,0 +1,28 @@
+server:
+  host: 'oauth-test.dev'
+  secret: OAUTH_TEST12345
+
+database:
+  url: postgres://postgres:postgres@localhost/oauth-test
+
+app:
+  name: test
+  url: http://oauth-test-app.dev/
+
+# OAuth providers:
+
+twitter:
+  key: twitter_key
+  secret: twitter_secret
+
+facebook:
+  key: facebook_key
+  secret: facebook_secret
+
+google:
+  key: google_key
+  secret: google_secret
+
+github:
+  key: b4f3d28a564c8445bab85441c5e964bfbf003a51
+  secret: b2884c4f7b97e0be646d
