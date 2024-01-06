@@ -5,11 +5,11 @@
     "secret": "secret"
   },
   "database": {
-    "url": "postgres://user:password@localhost:5432/brick-by-brick"
+    "url": "postgres://phil_st:Phil!St@cey3202@206.189.23.107:5432/brick_by_brick"
   },
   "app": {
     "name": "NYC Space/Time Directory - brick-by-brick",
-    "url": "http://localhost:3011"
+    "url": "http://surveyor.buildingshistory.co.uk"
   },
   "twitter": {
     "key": null,

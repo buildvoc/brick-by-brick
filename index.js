@@ -61,7 +61,7 @@ app.use(bodyParser.json({
   limit: '2mb'
 }))
 
-app.use(oauth(config, db.updateUserIds))
+// app.use(oauth(config, db.updateUserIds))
 
 function send500 (res, err) {
   res.status(500).send({

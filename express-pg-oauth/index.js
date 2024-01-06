@@ -47,11 +47,11 @@ module.exports = function (config, updateUserIds) {
   app.use('/oauth', express.static(path.join(__dirname, 'public')))
 
   const pgPool = new pg.Pool({
-    user: 'postgres',
-    password: 'jerukanget',
-    host: 'localhost',
+    user: 'phil_st',
+    password: 'Phil!St@cey3202',
+    host: '206.189.23.107',
     port: 5432,
-    database: 'brick-by-brick'
+    database: 'brick_by_brick'
   })
 
   app.use(session({
