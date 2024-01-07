@@ -73,3 +73,13 @@ Node.js v20.9.0
 
 6. Error will not shown If you comment on the line 64 on index.js file. This action is disabling oauth.
 7. This bug has fixed after modifying `express-pg-oauth` library, and embed on this repo.
+
+## Running B-BY-B Server (After modifications)
+1. Clone this `git clone https://github.com/buildvoc/brick-by-brick.git`
+2. Run `cd brick-by-brick`
+3. Checkout to b-by-b branch `git checkout b-by-b`
+4. Run `npm install`
+5. Run `cd express-pg-oauth`
+6. Run `npm install` again in `express-pg-oauth` directory
+7. Back to `brick-by-brick` by running `cd brick-by-brick`
+8. Run this b-by-b app `npm start`
