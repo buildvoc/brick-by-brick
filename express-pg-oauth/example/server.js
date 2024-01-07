@@ -1,4 +1,4 @@
-const PORT = 8080
+const PORT = process.env.PORT
 
 var argv = require('minimist')(process.argv.slice(2))
 var express = require('express')
@@ -26,7 +26,7 @@ var config = {}
 try {
   config = yaml.safeLoad(fs.readFileSync(argv.config, 'utf8'))
 } catch (e) {
-  console.error(`Error reading YAML file ${argv.config}: ${e.message}`)
+  console.error('Error reading YAML file %s: %s', argv.config, e.message)
   process.exit(1)
 }
 
@@ -45,8 +45,6 @@ function updateUserIds (oldUserIds, newUserId, callback) {
 }
 
 app.use(oauth(config, updateUserIds))
-
-console.log(app);
 
 app.get('/entries', function (req, res) {
   res.send(entries
@@ -71,9 +69,11 @@ app.get('/submit', (req, res) => {
 })
 
 app.get('/count', (req, res) => {
-  res.send({count: entries
-    .filter((entry) => entry.userId === req.session.user.id)
-    .length})
+  res.send({
+    count: entries
+      .filter((entry) => entry.userId === req.session.user.id)
+      .length
+  })
 })
 
 app.listen(PORT, () => {

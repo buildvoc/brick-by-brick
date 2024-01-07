@@ -6,7 +6,13 @@ const express = require('express')
 const cors = require('cors')
 const bodyParser = require('body-parser')
 const pkg = require('./package')
+var path = require('path')
+
+var session = require('express-session')
+var PGSession = require('connect-pg-simple')(session)
+
 const app = express()
+const server = require('http').createServer(app)
 
 const config = require('./base-config.json')
 let userConfig = Object.assign({}, config)
@@ -45,7 +51,7 @@ if (config.emitEvents) {
 //   process.exit(1)
 // }
 
-const oauth = require('express-pg-oauth')
+// const oauth = require('express-pg-oauth')
 const db = require('./lib/db')
 const queries = require('./lib/queries')
 const serialize = require('./lib/serialize')
@@ -61,7 +67,7 @@ app.use(bodyParser.json({
   limit: '2mb'
 }))
 
-app.use(oauth(config, db.updateUserIds))
+// app.use(oauth(config, db.updateUserIds))
 
 function send500 (res, err) {
   res.status(500).send({
@@ -629,6 +635,62 @@ app.get('/organizations/:organizationId/collections/:collectionId', (req, res) =
 })
 
 
-app.listen(PORT, () => {
+const expressPgOAuth = require('./express-pg-oauth/index')
+
+app.use('/oauth', express.static(path.join(__dirname, './express-pg-oauth/public')))
+
+app.use(session({
+  saveUninitialized: false,
+  store: new PGSession({
+    pool: expressPgOAuth.pgPool,
+    schemaName: 'oauth',
+    tableName: 'sessions'
+  }),
+  secret: expressPgOAuth.config.server.secret,
+  resave: false,
+  cookie: {
+    maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days
+  }
+}))
+
+app.use('/oauth', expressPgOAuth.grant)
+
+app.use(expressPgOAuth.getUserIdForSession)
+
+app.get('/oauth', (req, res) => {
+  console.log("/oauth");
+  res.send({
+    providers: expressPgOAuth.getProvidersFull(),
+    disconnect: `${expressPgOAuth.serverUrl}/disconnect`,
+    user: req.session.user,
+    oauth: req.session.oauth,
+    error: req.session.error
+  })
+})
+
+app.get('/oauth/authenticate/:provider', (req, res) => {
+  const callbackUrl = req.headers.referer
+  req.session.callbackUrl = callbackUrl
+  res.redirect(`/oauth/connect/${req.params.provider}`)
+})
+
+app.get('/oauth/disconnect', (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      send500(res, err)
+      return
+    }
+
+    res.send({
+      ok: true
+    })
+  })
+})
+
+app.get('/oauth/callback', expressPgOAuth.getUserInfo, expressPgOAuth.mergeUsers, function (req, res) {
+  expressPgOAuth.backToApp(req, res)
+})
+
+server.listen(PORT, () => {
   console.log(`${pkg.name} API listening on port ${PORT}!`)
 })

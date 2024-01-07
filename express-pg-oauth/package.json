@@ -1,6 +1,6 @@
 {
   "name": "express-pg-oauth",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "description": "Express middleware for OAuth authentication with a PostgreSQL backend",
   "main": "index.js",
   "scripts": {
@@ -13,20 +13,20 @@
   "author": "Bert Spaan",
   "license": "MIT",
   "dependencies": {
-    "@purest/providers": "^1.0.4",
-    "connect-pg-simple": "^9.0.1",
-    "express": "^4.18.2",
-    "express-session": "^1.17.3",
-    "grant-express": "^5.4.8",
+    "@purest/providers": "^1.0.0",
+    "connect-pg-simple": "^6.0.0",
+    "express": "^4.14.0",
+    "express-session": "^1.14.1",
+    "grant-express": "^4.0.0",
     "pg": "^8.11.3",
-    "purest": "^4.0.3",
-    "ramda": "^0.29.1",
-    "request": "^2.88.2"
+    "purest": "^3.0.0",
+    "ramda": "^0.22.1",
+    "request": "^2.75.0"
   },
   "devDependencies": {
     "cors": "^2.8.1",
     "js-yaml": "^3.6.1",
     "minimist": "^1.2.0",
-    "standard": "^8.3.0"
+    "standard": "^14.0.0"
   }
 }
