@@ -80,6 +80,6 @@ Node.js v20.9.0
 3. Checkout to b-by-b branch `git checkout b-by-b`
 4. Run `npm install`
 5. Run `cd express-pg-oauth`
-6. Run `npm install` again in `express-pg-oauth` directory
-7. Back to `brick-by-brick` by running `cd brick-by-brick`
+6. Run `npm install` again inside `express-pg-oauth` directory
+7. Back to `brick-by-brick` directory
 8. Run this b-by-b app `npm start`
