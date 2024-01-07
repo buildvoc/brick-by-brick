@@ -1,20 +1,14 @@
 
-// const argv = require('minimist')(process.argv.slice(2))
 const H = require('highland')
 const R = require('ramda')
 const express = require('express')
 const cors = require('cors')
 const bodyParser = require('body-parser')
 const pkg = require('./package')
-var path = require('path')
-
-var session = require('express-session')
-var PGSession = require('connect-pg-simple')(session)
-
 const app = express()
 const server = require('http').createServer(app)
 
-const config = require('./base-config.json')
+const config = require('./base-config')
 let userConfig = Object.assign({}, config)
 
 let socketIo
@@ -22,36 +16,7 @@ if (config.emitEvents) {
   socketIo = require('socket.io')(server)
 }
 
-
-// let configFound = false
-// if (process.env.BRICK_BY_BRICK_API_CONFIG || argv.config) {
-//   userConfig = require(process.env.BRICK_BY_BRICK_API_CONFIG || argv.config)
-//   configFound = true
-// }
-
-// const envVar = (key1, key2) => `${key1.toUpperCase()}_${key2.toUpperCase()}`
-
-// Object.keys(config).forEach((key1) => {
-//   Object.keys(config[key1]).forEach((key2) => {
-//     config[key1][key2] = process.env[envVar(key1, key2)] ||
-//       userConfig[key1][key2] ||
-//       config[key1][key2]
-
-//     if (process.env[envVar(key1, key2)]) {
-//       configFound = true
-//     }
-//   })
-// })
-
-// if (!configFound) {
-//   const message = 'No config found, set BRICK_BY_BRICK_API_CONFIG, use --config,' +
-//     ' or set per-item environment variables'
-
-//   console.error(message)
-//   process.exit(1)
-// }
-
-// const oauth = require('express-pg-oauth')
+const oauth = require('./express-pg-oauth/index')
 const db = require('./lib/db')
 const queries = require('./lib/queries')
 const serialize = require('./lib/serialize')
@@ -67,7 +32,8 @@ app.use(bodyParser.json({
   limit: '2mb'
 }))
 
-// app.use(oauth(config, db.updateUserIds))
+app.use(oauth(config, db.updateUserIds))
+
 
 function send500 (res, err) {
   res.status(500).send({
@@ -634,62 +600,6 @@ app.get('/organizations/:organizationId/collections/:collectionId', (req, res) =
   })
 })
 
-
-const expressPgOAuth = require('./express-pg-oauth/index')
-
-app.use('/oauth', express.static(path.join(__dirname, './express-pg-oauth/public')))
-
-app.use(session({
-  saveUninitialized: false,
-  store: new PGSession({
-    pool: expressPgOAuth.pgPool,
-    schemaName: 'oauth',
-    tableName: 'sessions'
-  }),
-  secret: expressPgOAuth.config.server.secret,
-  resave: false,
-  cookie: {
-    maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days
-  }
-}))
-
-app.use('/oauth', expressPgOAuth.grant)
-
-app.use(expressPgOAuth.getUserIdForSession)
-
-app.get('/oauth', (req, res) => {
-  console.log("/oauth");
-  res.send({
-    providers: expressPgOAuth.getProvidersFull(),
-    disconnect: `${expressPgOAuth.serverUrl}/disconnect`,
-    user: req.session.user,
-    oauth: req.session.oauth,
-    error: req.session.error
-  })
-})
-
-app.get('/oauth/authenticate/:provider', (req, res) => {
-  const callbackUrl = req.headers.referer
-  req.session.callbackUrl = callbackUrl
-  res.redirect(`/oauth/connect/${req.params.provider}`)
-})
-
-app.get('/oauth/disconnect', (req, res) => {
-  req.session.destroy((err) => {
-    if (err) {
-      send500(res, err)
-      return
-    }
-
-    res.send({
-      ok: true
-    })
-  })
-})
-
-app.get('/oauth/callback', expressPgOAuth.getUserInfo, expressPgOAuth.mergeUsers, function (req, res) {
-  expressPgOAuth.backToApp(req, res)
-})
 
 server.listen(PORT, () => {
   console.log(`${pkg.name} API listening on port ${PORT}!`)

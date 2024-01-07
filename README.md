@@ -72,3 +72,4 @@ Node.js v20.9.0
 `
 
 6. Error will not shown If you comment on the line 64 on index.js file. This action is disabling oauth.
+7. This bug has fixed after modifying `express-pg-oauth` library, and embed on this repo.

@@ -1,6 +1,7 @@
 var path = require('path')
 var R = require('ramda')
 const Config = require('./config')
+var express = require('express')
 var request = require('request')
 var Grant = require('grant-express')
 var purest = require('purest')({ request })
@@ -8,9 +9,10 @@ var purestConfig = require('@purest/providers')
 var pg = require('pg')
 var session = require('express-session')
 var PGSession = require('connect-pg-simple')(session)
+var app = express()
+var dbConfig = require('../base-config')
 
-
-  var config = require('../base-config.json')
+module.exports = function (config, updateUserIds) {
   // Merge user config (with provider keys and secrets)
   // with baseConfig in config.js
   config = Config(config)
@@ -41,19 +43,37 @@ var PGSession = require('connect-pg-simple')(session)
     ]
   }))
 
+  app.use('/oauth', express.static(path.join(__dirname, 'public')))
+
   const pgPool = new pg.Pool({
-    user: 'phil_st',
-    password: 'Phil!St@cey3202',
-    host: '206.189.23.107',
-    port: 5432,
-    database: 'brick_by_brick'
+    user: dbConfig.db_user,
+    password: dbConfig.db_pass,
+    host: dbConfig.db_host,
+    port: dbConfig.db_port,
+    database: dbConfig.db_name
   })
+
+  app.use(session({
+    saveUninitialized: false,
+    store: new PGSession({
+      pool: pgPool,
+      schemaName: 'oauth',
+      tableName: 'sessions'
+    }),
+    secret: config.server.secret,
+    resave: false,
+    cookie: {
+      maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days
+    }
+  }))
 
   function send500 (res, err) {
     res.status(500).send({
       error: err.message
     })
   }
+
+  app.use('/oauth', grant)
 
   function executeQuery (query, params, callback) {
     pgPool.connect((err, client, done) => {
@@ -146,6 +166,37 @@ var PGSession = require('connect-pg-simple')(session)
       }
     })
   }
+
+  app.use(getUserIdForSession)
+
+  app.get('/oauth', (req, res) => {
+    res.send({
+      providers: getProvidersFull(),
+      disconnect: `${serverUrl}/disconnect`,
+      user: req.session.user,
+      oauth: req.session.oauth,
+      error: req.session.error
+    })
+  })
+
+  app.get('/oauth/authenticate/:provider', (req, res) => {
+    const callbackUrl = req.headers.referer
+    req.session.callbackUrl = callbackUrl
+    res.redirect(`/oauth/connect/${req.params.provider}`)
+  })
+
+  app.get('/oauth/disconnect', (req, res) => {
+    req.session.destroy((err) => {
+      if (err) {
+        send500(res, err)
+        return
+      }
+
+      res.send({
+        ok: true
+      })
+    })
+  })
 
   function getUserInfo (req, res, next) {
     var session = req.session
@@ -298,15 +349,9 @@ var PGSession = require('connect-pg-simple')(session)
     res.redirect(req.session.callbackUrl)
   }
 
+  app.get('/oauth/callback', getUserInfo, mergeUsers, function (req, res) {
+    backToApp(req, res)
+  })
 
-module.exports = {
-  config,
-  grant,
-  serverUrl,
-  pgPool,
-  getUserIdForSession,
-  getProvidersFull,
-  getUserInfo,
-  mergeUsers,
-  backToApp
+  return app
 }
