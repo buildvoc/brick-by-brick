@@ -4,7 +4,6 @@ const baseConfig = {
   defaults: {
     transport: 'session',
     state: true,
-    callback: '/oauth/callback',
     prefix: "/oauth/connect"
   },
   twitter: {

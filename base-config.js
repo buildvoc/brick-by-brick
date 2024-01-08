@@ -29,6 +29,8 @@ module.exports = {
   github: {
     key: process.env.GITHUB_KEY,
     secret: process.env.GITHUB_SECRET,
+    callback: '/oauth/callback',
+    // redirect_uri: `${process.env.SERVER_HOST}/oauth/connect/github/callback`,
   },
 
   port: process.env.PORT,
