@@ -1,12 +1,11 @@
 var R = require('ramda')
 
 const baseConfig = {
-  server: {
-    protocol: 'http',
+  defaults: {
     transport: 'session',
     state: true,
     callback: '/oauth/callback',
-    path: '/oauth'
+    prefix: "/oauth/connect"
   },
   twitter: {
     title: 'Twitter',

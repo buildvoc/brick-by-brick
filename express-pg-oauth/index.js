@@ -3,7 +3,7 @@ var R = require('ramda')
 const Config = require('./config')
 var express = require('express')
 var request = require('request')
-var Grant = require('grant-express')
+var Grant = require('grant').express()
 var purest = require('purest')({ request })
 var purestConfig = require('@purest/providers')
 var pg = require('pg')
@@ -17,7 +17,7 @@ module.exports = function (config, updateUserIds) {
   // with baseConfig in config.js
   config = Config(config)
 
-  const serverUrl = `${config.server.protocol}://${config.server.host}${config.server.path}`
+  const serverUrl = `${config.defaults.origin}/oauth`
 
   var grant = new Grant(config)
 
@@ -60,7 +60,7 @@ module.exports = function (config, updateUserIds) {
       schemaName: 'oauth',
       tableName: 'sessions'
     }),
-    secret: config.server.secret,
+    secret: config.defaults.secret,
     resave: false,
     cookie: {
       maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days

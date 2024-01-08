@@ -3,8 +3,8 @@ dotenv.config();
 
 module.exports = {
   emitEvents: process.env.EMIT || false,
-  server: {
-    host: process.env.SERVER_HOST,
+  defaults: {
+    origin: process.env.SERVER_HOST,
     secret: process.env.SECRET
   },
   database: {

@@ -17,7 +17,7 @@
     "connect-pg-simple": "^6.0.0",
     "express": "^4.14.0",
     "express-session": "^1.14.1",
-    "grant-express": "^4.0.0",
+    "grant": "^5.4.22",
     "pg": "^8.11.3",
     "purest": "^3.0.0",
     "ramda": "^0.22.1",
