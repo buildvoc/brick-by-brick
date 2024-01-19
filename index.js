@@ -18,7 +18,7 @@ if (config.emitEvents) {
     cors: {
       origin: 'http://surveyor-map.buildingshistory.co.uk',
       methods: ["GET", "POST"],
-      credentials: false,
+      credentials: true,
     }
   })
 }
