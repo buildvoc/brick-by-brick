@@ -13,7 +13,14 @@ let userConfig = Object.assign({}, config)
 
 let socketIo
 if (config.emitEvents) {
-  socketIo = require('socket.io')(server)
+  socketIo = require('socket.io')(server, {
+    allowEIO3: true,
+    cors: {
+      origin: 'http://surveyor-map.buildingshistory.co.uk',
+      methods: ["GET", "POST"],
+      credentials: false,
+    }
+  })
 }
 
 const oauth = require('./express-pg-oauth/index')
