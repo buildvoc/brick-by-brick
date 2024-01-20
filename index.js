@@ -16,7 +16,7 @@ if (config.emitEvents) {
   socketIo = require('socket.io')(server, {
     allowEIO3: true,
     cors: {
-      origin: 'http://surveyor-map.buildingshistory.co.uk',
+      origin: 'https://surveyor-map.buildingshistory.co.uk',
       methods: ["GET", "POST"],
       credentials: true,
     }
